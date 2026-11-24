@@ -46,6 +46,16 @@ form.addEventListener('submit', (e) => {
   note.classList.add('ok');
 });
 
+// Solution photos come from Unsplash's CDN: retry once, then hide the photo so the card never shows a broken image.
+document.querySelectorAll('.card-photo').forEach((img) => {
+  img.addEventListener('error', () => {
+    if (img.dataset.retried) { img.hidden = true; return; }
+    img.dataset.retried = '1';
+    img.removeAttribute('srcset');
+    img.src += '&retry=1';
+  });
+});
+
 // Fade sections in as they scroll into view.
 const revealEls = document.querySelectorAll('.reveal');
 if ('IntersectionObserver' in window) {
